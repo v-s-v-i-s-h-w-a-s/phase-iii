@@ -1,0 +1,110 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+trackenv/
+venv/
+env/
+ENV/
+
+# Video files (too large for Git)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wmv
+*.flv
+*.webm
+
+# Image files (generated outputs and extracted frames)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
+
+# Model files (too large)
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.h5
+*.hdf5
+
+# Dataset directories (too large)
+dataset/
+dataset_type2/
+ball\ dataset/
+ball\ datatset\ 2/
+basketball_real_training/
+basketball_type2_training/
+enhanced_basketball_training/
+hawks\ vs\ knicks/
+
+# Exclude all basketball_gnn subdirectories with images/videos/models
+basketball_gnn/custom_yolo/basketball_dataset/
+basketball_gnn/custom_yolo/quick_basketball_dataset/
+basketball_gnn/video_analysis_*/
+basketball_gnn/results/
+basketball_gnn/models/
+basketball_gnn/custom_yolo/runs/
+
+# JSON stats files (generated)
+*_stats.json
+model_comparison_results_*.json
+
+# Test frames
+test_frame_*.jpg
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+*.lnk
+
+# Documentation build
+docs/_build/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/

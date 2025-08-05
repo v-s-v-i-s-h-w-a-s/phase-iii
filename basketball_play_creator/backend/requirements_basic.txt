@@ -1,0 +1,27 @@
+# Basketball Play Creator - Backend Dependencies (Basic)
+
+# Core Flask framework
+Flask==2.3.3
+Flask-CORS==4.0.0
+Flask-SocketIO==5.3.6
+python-socketio==5.8.0
+
+# Basic ML and data processing
+scikit-learn>=1.0.0
+numpy>=1.20.0
+pandas>=1.5.0
+
+# Natural Language Processing (optional for demo)
+# spacy>=3.4.0
+# transformers>=4.0.0
+
+# HTTP & API
+requests>=2.25.0
+urllib3>=1.26.0
+
+# Basic utilities
+click>=8.0.0
+Werkzeug>=2.3.0
+itsdangerous>=2.1.0
+Jinja2>=3.1.0
+MarkupSafe>=2.1.0

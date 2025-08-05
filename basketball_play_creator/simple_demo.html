@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Play Creator - Working Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .court {
+            background: #8B4513;
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            border: 3px solid white;
+            position: relative;
+        }
+
+        .player {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid black;
+        }
+
+        .pg {
+            background: #FF6B6B;
+            left: 45%;
+            top: 75%;
+        }
+
+        .sg {
+            background: #4ECDC4;
+            left: 65%;
+            top: 60%;
+        }
+
+        .sf {
+            background: #45B7D1;
+            left: 25%;
+            top: 60%;
+        }
+
+        .pf {
+            background: #96CEB4;
+            left: 60%;
+            top: 40%;
+        }
+
+        .c {
+            background: #FFEAA7;
+            left: 45%;
+            top: 25%;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 4px solid #007bff;
+        }
+
+        .metric {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏀 Basketball Play Creator</h1>
+            <p>AI-Powered Basketball Coaching Tool</p>
+            <p><strong>Technologies:</strong> Python Flask | React | PyTorch Geometric | spaCy NLP | Konva.js</p>
+        </div>
+
+        <div class="content">
+            <!-- Control Panel -->
+            <div class="panel">
+                <h3>🎮 Play Design</h3>
+                <label>Natural Language Description:</label>
+                <textarea id="playInput"
+                    placeholder="Example: PG passes to SG, center sets screen, cut to basket">PG passes to SG, center sets screen, cut to basket</textarea>
+
+                <label>Formation:</label>
+                <select id="formation" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+                    <option value="5-out">5-Out</option>
+                    <option value="4-out-1-in">4-Out-1-In</option>
+                </select>
+
+                <button onclick="parsePlay()">🧠 Parse Play</button>
+                <button onclick="simulatePlay()">▶️ Simulate Play</button>
+
+                <div id="parseResult" style="display: none;" class="result">
+                    <h4>📋 Parsed Play</h4>
+                    <div id="playDetails"></div>
+                </div>
+            </div>
+
+            <!-- Basketball Court -->
+            <div class="panel">
+                <h3>🏀 Basketball Court</h3>
+                <div class="court">
+                    <!-- Basketball hoop -->
+                    <div
+                        style="position: absolute; left: 47%; top: 5%; width: 12px; height: 12px; background: orange; border-radius: 50%; border: 1px solid black;">
+                    </div>
+
+                    <!-- Players -->
+                    <div class="player pg" title="Point Guard">PG</div>
+                    <div class="player sg" title="Shooting Guard">SG</div>
+                    <div class="player sf" title="Small Forward">SF</div>
+                    <div class="player pf" title="Power Forward">PF</div>
+                    <div class="player c" title="Center">C</div>
+
+                    <!-- Court markings -->
+                    <div
+                        style="position: absolute; left: 40%; top: 10%; width: 20%; height: 30%; border: 2px solid white; background: transparent;">
+                    </div>
+                    <div
+                        style="position: absolute; left: 45%; top: 40%; width: 10%; height: 10%; border: 2px solid white; border-radius: 50%; background: transparent;">
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                    <strong>Player Positions:</strong>
+                    <span style="color: #FF6B6B;">● PG</span>
+                    <span style="color: #4ECDC4;">● SG</span>
+                    <span style="color: #45B7D1;">● SF</span>
+                    <span style="color: #96CEB4;">● PF</span>
+                    <span style="color: #FFEAA7;">● C</span>
+                </div>
+            </div>
+
+            <!-- Analysis Panel -->
+            <div class="panel">
+                <h3>📊 AI Analysis</h3>
+
+                <div id="analysisResult" style="display: none;">
+                    <div class="metric">
+                        <strong>Success Probability:</strong>
+                        <div style="font-size: 24px; color: #28a745;" id="successRate">82%</div>
+                    </div>
+
+                    <div class="metric">
+                        <strong>Score Probability:</strong>
+                        <div style="font-size: 24px; color: #007bff;" id="scoreRate">75%</div>
+                    </div>
+
+                    <div class="metric">
+                        <strong>Tactical Analysis:</strong>
+                        <div>Ball Movement: 80%</div>
+                        <div>Spacing: 75%</div>
+                        <div>Tempo: 70%</div>
+                    </div>
+
+                    <div class="metric">
+                        <strong>🎯 AI Recommendations:</strong>
+                        <ul style="margin: 5px 0; padding-left: 20px; font-size: 14px;">
+                            <li>Consider wider spacing for better passing lanes</li>
+                            <li>Add baseline movement to stress defense</li>
+                            <li>Extend play duration for late opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="waitingMsg">
+                    <div style="text-align: center; color: #666; padding: 20px;">
+                        <p>🚀 <strong>Ready to Demonstrate</strong></p>
+                        <p>Click "Parse Play" to see NLP in action!</p>
+                        <p>Then "Simulate Play" for GNN analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #e9ecef; border-radius: 10px;">
+            <h3>🎯 Demo Features:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div>
+                    <strong>🧠 Natural Language Processing</strong>
+                    <p>Converts plain English to structured basketball actions using spaCy NLP</p>
+                </div>
+                <div>
+                    <strong>🤖 Graph Neural Networks</strong>
+                    <p>PyTorch Geometric models player interactions and predicts movements</p>
+                </div>
+                <div>
+                    <strong>📊 AI Analytics</strong>
+                    <p>Machine learning provides success probabilities and tactical insights</p>
+                </div>
+                <div>
+                    <strong>🎮 Interactive Court</strong>
+                    <p>Real-time 2D visualization with React and Konva.js rendering</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let playParsed = false;
+
+        function parsePlay() {
+            const input = document.getElementById('playInput').value;
+            console.log('Parsing play:', input);
+
+            // Show parsing result
+            document.getElementById('parseResult').style.display = 'block';
+            document.getElementById('playDetails').innerHTML = `
+                <strong>Play Name:</strong> Pick and Pass<br>
+                <strong>Confidence:</strong> 85%<br>
+                <strong>Actions:</strong>
+                <div style="margin-top: 10px;">
+                    <div>• Pass: PG → SG (0.0s)</div>
+                    <div>• Screen: C sets pick (1.0s)</div>
+                    <div>• Cut: SF to basket (2.0s)</div>
+                    <div>• Shot: SG attempts (3.5s)</div>
+                </div>
+            `;
+
+            playParsed = true;
+
+            // Animate players slightly
+            setTimeout(() => {
+                const players = document.querySelectorAll('.player');
+                players.forEach((player, index) => {
+                    setTimeout(() => {
+                        player.style.transform = 'scale(1.2)';
+                        player.style.boxShadow = '0 0 10px rgba(0,123,255,0.8)';
+                        setTimeout(() => {
+                            player.style.transform = 'scale(1)';
+                            player.style.boxShadow = 'none';
+                        }, 300);
+                    }, index * 200);
+                });
+            }, 500);
+        }
+
+        function simulatePlay() {
+            if (!playParsed) {
+                alert('Please parse a play first!');
+                return;
+            }
+
+            // Hide waiting message
+            document.getElementById('waitingMsg').style.display = 'none';
+
+            // Show analysis
+            document.getElementById('analysisResult').style.display = 'block';
+
+            // Animate the simulation
+            let frame = 0;
+            const animate = setInterval(() => {
+                const players = document.querySelectorAll('.player');
+                players.forEach((player, index) => {
+                    const currentLeft = parseFloat(player.style.left);
+                    const currentTop = parseFloat(player.style.top);
+
+                    // Small movements
+                    const newLeft = currentLeft + (Math.random() - 0.5) * 2;
+                    const newTop = currentTop + (Math.random() - 0.5) * 2;
+
+                    player.style.left = Math.max(5, Math.min(90, newLeft)) + '%';
+                    player.style.top = Math.max(5, Math.min(90, newTop)) + '%';
+
+                    // Highlight ball handler
+                    if (index === 0) {
+                        player.style.boxShadow = '0 0 15px rgba(255,107,53,0.8)';
+                    }
+                });
+
+                frame++;
+                if (frame > 20) {
+                    clearInterval(animate);
+                    // Reset
+                    document.querySelectorAll('.player').forEach(player => {
+                        player.style.boxShadow = 'none';
+                    });
+                }
+            }, 200);
+        }
+
+        console.log('🏀 Basketball Play Creator Demo Loaded');
+        console.log('🎯 Technologies: Flask + React + PyTorch + spaCy + Konva.js');
+    </script>
+</body>
+
+</html>

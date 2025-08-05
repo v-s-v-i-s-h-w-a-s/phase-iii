@@ -1,0 +1,29 @@
+# Core ML/DL dependencies
+torch>=1.12.0
+torch-geometric>=2.3.0
+torchvision>=0.13.0
+
+# Computer Vision & Tracking
+opencv-python>=4.6.0
+ultralytics>=8.0.0  # YOLOv8
+# mediapipe>=0.9.0  # Not compatible with Python 3.13
+
+# Data handling
+pandas>=1.5.0
+numpy>=1.21.0
+scipy>=1.9.0
+
+# Visualization
+matplotlib>=3.5.0
+networkx>=2.8.0
+seaborn>=0.11.0
+
+# Additional utilities
+scikit-learn>=1.1.0
+tqdm>=4.64.0
+pillow>=9.0.0
+
+# Custom YOLO training
+PyYAML>=6.0
+labelImg>=1.8.6  # Optional: for manual annotation
+roboflow>=1.0.0  # Optional: for dataset management

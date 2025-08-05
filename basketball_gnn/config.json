@@ -1,0 +1,25 @@
+{
+  "graph_builder": {
+    "proximity_threshold": 150.0,
+    "min_players": 3,
+    "max_players": 12,
+    "court_width": 940.0,
+    "court_height": 500.0
+  },
+  "model_type": "gcn",
+  "hidden_channels": 64,
+  "out_channels": 32,
+  "num_epochs": 50,
+  "learning_rate": 0.01,
+  "batch_size": 16,
+  "weight_decay": 1e-5,
+  "min_track_length": 5,
+  "confidence_threshold": 0.5,
+  "plot_training": true,
+  "save_graphs": false,
+  "create_animation": false,
+  "pose_format": "mediapipe",
+  "image_size": [1920, 1080],
+  "num_test_frames": 100,
+  "num_test_players": 10
+}

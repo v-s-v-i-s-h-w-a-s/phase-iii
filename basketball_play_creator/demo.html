@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Play Creator - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 30px;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .control-panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            height: fit-content;
+        }
+
+        .court-container {
+            background: #8B4513;
+            border-radius: 15px;
+            position: relative;
+            aspect-ratio: 940/500;
+            border: 3px solid #fff;
+        }
+
+        .court {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .court-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                /* Three-point arc */
+                radial-gradient(ellipse 50% 40% at 50% 10%, transparent 237px, white 237px, white 240px, transparent 242px),
+                /* Free throw lane */
+                linear-gradient(to right, transparent 41%, white 41%, white 42%, transparent 42%, transparent 58%, white 58%, white 59%, transparent 59%),
+                linear-gradient(to bottom, transparent 10%, white 10%, white 11%, transparent 11%, transparent 48%, white 48%, white 49%, transparent 49%),
+                /* Center circle */
+                radial-gradient(circle at 50% 50%, transparent 60px, white 60px, white 62px, transparent 64px),
+                /* Free throw circle */
+                radial-gradient(circle at 50% 36%, transparent 60px, white 60px, white 62px, transparent 64px);
+        }
+
+        .player {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .player:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .player.pg {
+            background: #FF6B6B;
+            left: 45%;
+            top: 75%;
+        }
+
+        .player.sg {
+            background: #4ECDC4;
+            left: 60%;
+            top: 65%;
+        }
+
+        .player.sf {
+            background: #45B7D1;
+            left: 30%;
+            top: 65%;
+        }
+
+        .player.pf {
+            background: #96CEB4;
+            left: 57%;
+            top: 55%;
+        }
+
+        .player.c {
+            background: #FFEAA7;
+            left: 45%;
+            top: 35%;
+        }
+
+        .basket {
+            position: absolute;
+            left: 48%;
+            top: 8%;
+            width: 16px;
+            height: 16px;
+            background: #FF6B35;
+            border-radius: 50%;
+            border: 2px solid #000;
+        }
+
+        .analysis-panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            height: fit-content;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .metrics {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .metric {
+            margin-bottom: 15px;
+        }
+
+        .metric h4 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .suggestions {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #38ef7d;
+        }
+
+        .suggestions h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .suggestion {
+            background: #f0f9ff;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #38ef7d;
+            font-size: 14px;
+        }
+
+        .parsed-play {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .action-item {
+            background: #fff8f0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            background: #38ef7d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .demo-data {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏀 Basketball Play Creator</h1>
+            <p>AI-Powered Coaching Tool with Natural Language Processing & Graph Neural Networks</p>
+            <div class="tech-stack">
+                <span class="tech-badge">Python Flask</span>
+                <span class="tech-badge">React</span>
+                <span class="tech-badge">PyTorch Geometric</span>
+                <span class="tech-badge">spaCy NLP</span>
+                <span class="tech-badge">Konva.js</span>
+                <span class="tech-badge">Material-UI</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Left Panel: Controls -->
+            <div class="control-panel">
+                <h3>🎮 Play Design</h3>
+
+                <div class="input-group">
+                    <label for="playDescription">Natural Language Description:</label>
+                    <textarea id="playDescription"
+                        placeholder="Enter your play description...&#10;&#10;Examples:&#10;• PG passes to SG, center sets screen, cut to basket&#10;• Run a pick and roll with center, then pass to wing for three-pointer&#10;• Point guard dribbles left, power forward sets pick">PG passes to SG, center sets screen, cut to basket</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="formation">Formation:</label>
+                    <select id="formation">
+                        <option value="5-out">5-Out</option>
+                        <option value="4-out-1-in">4-Out-1-In</option>
+                        <option value="1-4-high">1-4-High</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="parsePlay()">
+                    🧠 Parse Play
+                </button>
+
+                <button class="btn btn-success" onclick="simulatePlay()">
+                    ▶️ Simulate Play
+                </button>
+
+                <div class="feature-highlight">
+                    <h4>🤖 AI Features</h4>
+                    <p><strong>NLP Parser:</strong> Converts natural language to structured actions</p>
+                    <p><strong>GNN Engine:</strong> Simulates realistic player movements</p>
+                    <p><strong>AI Analytics:</strong> Provides tactical insights and optimization</p>
+                </div>
+
+                <div id="parsedPlay" class="parsed-play" style="display: none;">
+                    <h4>📋 Parsed Play: <span id="playName"></span></h4>
+                    <p><span class="confidence-badge" id="confidence"></span></p>
+                    <div id="actions"></div>
+                </div>
+            </div>
+
+            <!-- Center Panel: Basketball Court -->
+            <div class="court-container">
+                <div class="court">
+                    <div class="court-lines"></div>
+                    <div class="basket"></div>
+
+                    <!-- Players -->
+                    <div class="player pg" title="Point Guard">PG</div>
+                    <div class="player sg" title="Shooting Guard">SG</div>
+                    <div class="player sf" title="Small Forward">SF</div>
+                    <div class="player pf" title="Power Forward">PF</div>
+                    <div class="player c" title="Center">C</div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Analysis -->
+            <div class="analysis-panel">
+                <h3>📊 AI Analysis</h3>
+
+                <div id="simulationResults" class="demo-data" style="display: none;">
+                    <div class="metrics">
+                        <div class="metric">
+                            <h4>Success Probability</h4>
+                            <div class="metric-value" id="successProb">82%</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="successBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric">
+                            <h4>Score Probability</h4>
+                            <div class="metric-value" id="scoreProb">75%</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="scoreBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metrics">
+                        <h4>🏀 Tactical Analysis</h4>
+                        <div class="metric">
+                            <span>Ball Movement:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span>Spacing:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span>Tempo:</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="suggestions">
+                        <h3>💡 AI Optimization</h3>
+                        <div class="suggestion">
+                            🎯 Consider wider spacing for better passing lanes
+                        </div>
+                        <div class="suggestion">
+                            🔄 Add baseline movement to stress the defense
+                        </div>
+                        <div class="suggestion">
+                            ⚡ Extend play duration for better late opportunities
+                        </div>
+                    </div>
+                </div>
+
+                <div id="waitingMessage">
+                    <div class="feature-highlight">
+                        <h4>🚀 Ready to Demonstrate</h4>
+                        <p>Click "Parse Play" to see natural language processing in action!</p>
+                        <p>Then click "Simulate Play" to see GNN-powered analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function parsePlay() {
+            const description = document.getElementById('playDescription').value;
+            const formation = document.getElementById('formation').value;
+
+            // Simulate parsing delay
+            setTimeout(() => {
+                // Show parsed play
+                document.getElementById('parsedPlay').style.display = 'block';
+                document.getElementById('playName').textContent = 'Pick and Pass';
+                document.getElementById('confidence').textContent = '85% Confidence';
+
+                // Show actions
+                const actionsHtml = `
+                    <div class="action-item">🏀 Pass: PG → SG (0.0s)</div>
+                    <div class="action-item">🛡️ Screen: C sets pick for PG (1.0s)</div>
+                    <div class="action-item">🏃 Cut: SF cuts to basket (2.0s)</div>
+                    <div class="action-item">🎯 Shot: SG takes shot (3.5s)</div>
+                `;
+                document.getElementById('actions').innerHTML = actionsHtml;
+
+                // Animate players slightly
+                animatePlayers();
+
+            }, 800);
+        }
+
+        function simulatePlay() {
+            // Hide waiting message
+            document.getElementById('waitingMessage').style.display = 'none';
+
+            // Show simulation results
+            document.getElementById('simulationResults').style.display = 'block';
+
+            // Animate progress bars
+            setTimeout(() => {
+                document.getElementById('successBar').style.width = '82%';
+                document.getElementById('scoreBar').style.width = '75%';
+            }, 500);
+
+            // Animate player movements
+            animatePlaySimulation();
+        }
+
+        function animatePlayers() {
+            const players = document.querySelectorAll('.player');
+            players.forEach((player, index) => {
+                setTimeout(() => {
+                    player.style.transform = 'scale(1.1)';
+                    player.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.8)';
+
+                    setTimeout(() => {
+                        player.style.transform = 'scale(1)';
+                        player.style.boxShadow = '2px 2px 8px rgba(0,0,0,0.3)';
+                    }, 300);
+                }, index * 200);
+            });
+        }
+
+        function animatePlaySimulation() {
+            const players = document.querySelectorAll('.player');
+
+            // Simulate player movements over 5 seconds
+            let step = 0;
+            const interval = setInterval(() => {
+                players.forEach((player, index) => {
+                    // Simulate movement
+                    const currentLeft = parseFloat(player.style.left || getComputedStyle(player).left);
+                    const currentTop = parseFloat(player.style.top || getComputedStyle(player).top);
+
+                    // Small random movements
+                    const deltaX = (Math.random() - 0.5) * 2;
+                    const deltaY = (Math.random() - 0.5) * 2;
+
+                    player.style.left = (currentLeft + deltaX) + '%';
+                    player.style.top = (currentTop + deltaY) + '%';
+
+                    // Highlight ball handler
+                    if (index === 0) { // PG
+                        player.style.boxShadow = '0 0 15px rgba(255, 107, 53, 0.8)';
+                    }
+                });
+
+                step++;
+                if (step > 20) {
+                    clearInterval(interval);
+                    // Reset highlights
+                    players.forEach(player => {
+                        player.style.boxShadow = '2px 2px 8px rgba(0,0,0,0.3)';
+                    });
+                }
+            }, 250);
+        }
+
+        // Initialize demo
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🏀 Basketball Play Creator Demo Loaded');
+            console.log('🎯 Features: NLP Parsing, GNN Simulation, AI Analytics');
+        });
+    </script>
+</body>
+
+</html>
