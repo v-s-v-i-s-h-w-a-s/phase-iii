@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏀 Analysis Results - Basketball Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .chart-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+        }
+        
+        .chart-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .timeline-chart {
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .class-distribution {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .class-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .class-emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .class-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .class-count {
+            color: #666;
+            font-size: 1.2em;
+        }
+        
+        .download-section {
+            background: #e9f7ef;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-processing {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Upload</a>
+        
+        <div class="header">
+            <h1>🏀 Analysis Results</h1>
+            <div class="status-indicator status-{{ status.status }}">
+                Status: {{ status.status.title() }}
+            </div>
+        </div>
+        
+        {% if status.status == 'completed' and status.summary %}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ status.summary.total_detections }}</div>
+                <div class="stat-label">Total Detections</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ "%.3f"|format(status.summary.average_confidence) }}</div>
+                <div class="stat-label">Average Confidence</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ status.total_frames or 0 }}</div>
+                <div class="stat-label">Total Frames</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ status.fps or 0 }}</div>
+                <div class="stat-label">FPS</div>
+            </div>
+        </div>
+        
+        <div class="chart-section">
+            <h3 class="chart-title">🎯 Object Detection Distribution</h3>
+            <div class="class-distribution">
+                {% for class_name, count in status.summary.class_distribution.items() %}
+                <div class="class-item">
+                    <div class="class-emoji">
+                        {% if class_name == 'player' %}👤
+                        {% elif class_name == 'referee' %}👨‍💼
+                        {% elif class_name == 'ball' %}🏀
+                        {% elif class_name == 'hoop' %}🏆
+                        {% else %}📦{% endif %}
+                    </div>
+                    <div class="class-name">{{ class_name.title() }}</div>
+                    <div class="class-count">{{ count }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {% if status.summary.detection_timeline %}
+        <div class="chart-section">
+            <h3 class="chart-title">📈 Detection Timeline</h3>
+            <canvas id="timelineChart" class="timeline-chart"></canvas>
+        </div>
+        {% endif %}
+        
+        <div class="download-section">
+            <h3>📥 Download Results</h3>
+            <p>Download your analyzed video and detection data</p>
+            <a href="/download/{{ task_id }}" class="download-btn">📹 Download Annotated Video</a>
+        </div>
+        
+        {% elif status.status == 'processing' %}
+        <div class="chart-section">
+            <h3 class="chart-title">⏳ Processing in Progress</h3>
+            <p style="text-align: center; color: #666;">{{ status.message }}</p>
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            </div>
+            <script>
+                // Auto-refresh every 3 seconds
+                setTimeout(() => location.reload(), 3000);
+            </script>
+        </div>
+        
+        {% elif status.status == 'error' %}
+        <div class="chart-section">
+            <h3 class="chart-title">❌ Processing Error</h3>
+            <p style="text-align: center; color: #dc3545;">{{ status.message }}</p>
+        </div>
+        
+        {% else %}
+        <div class="chart-section">
+            <h3 class="chart-title">📋 Task Information</h3>
+            <p style="text-align: center; color: #666;">Task ID: {{ task_id }}</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    {% if status.status == 'completed' and status.summary and status.summary.detection_timeline %}
+    <script>
+        // Timeline Chart
+        const timelineData = {{ status.summary.detection_timeline | tojson }};
+        
+        const ctx = document.getElementById('timelineChart').getContext('2d');
+        
+        // Prepare data for Chart.js
+        const labels = timelineData.map(item => `${Math.floor(item.time / 60)}:${(item.time % 60).toString().padStart(2, '0')}`);
+        
+        const datasets = [];
+        const colors = {
+            'player': '#007bff',
+            'referee': '#28a745',
+            'ball': '#ffc107',
+            'hoop': '#dc3545'
+        };
+        
+        // Get all class names
+        const classNames = new Set();
+        timelineData.forEach(item => {
+            Object.keys(item).forEach(key => {
+                if (key !== 'time') classNames.add(key);
+            });
+        });
+        
+        classNames.forEach(className => {
+            datasets.push({
+                label: className.charAt(0).toUpperCase() + className.slice(1),
+                data: timelineData.map(item => item[className] || 0),
+                borderColor: colors[className] || '#6c757d',
+                backgroundColor: colors[className] + '20' || '#6c757d20',
+                fill: false,
+                tension: 0.1
+            });
+        });
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Detections'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time (MM:SS)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Basketball Detection Over Time'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+    
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</body>
+</html>

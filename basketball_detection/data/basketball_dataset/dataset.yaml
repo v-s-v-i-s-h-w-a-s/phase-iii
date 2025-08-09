@@ -1,0 +1,9 @@
+names:
+  0: player
+  1: referee
+  2: ball
+  3: hoop
+nc: 4
+test: C:\Users\vish\Capstone PROJECT\Phase III\phase-iii\basketball_detection\data\basketball_dataset\test
+train: C:\Users\vish\Capstone PROJECT\Phase III\phase-iii\basketball_detection\data\basketball_dataset\train
+val: C:\Users\vish\Capstone PROJECT\Phase III\phase-iii\basketball_detection\data\basketball_dataset\val

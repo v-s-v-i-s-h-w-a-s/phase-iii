@@ -1,0 +1,267 @@
+# 🏀 BASKETBALL DETECTION PROJECT - .gitignore
+
+# ====================
+# PYTHON & ENVIRONMENT
+# ====================
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+.python-version
+.pyenv/
+
+# PyTorch & AI/ML Models
+# ====================
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.h5
+*.pb
+*.safetensors
+
+# YOLO Models (these are large pre-trained models)
+yolo*.pt
+best.pt
+last.pt
+model.pt
+
+# Training outputs
+runs/
+weights/
+exp*/
+train*/
+val*/
+
+# ====================
+# VIDEO & IMAGE FILES
+# ====================
+
+# Video files (often very large)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wmv
+*.flv
+*.webm
+*.m4v
+
+# Large image datasets
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.webp
+
+# Specific dataset exclusions (comment out if you want to include specific datasets)
+# dataset/*/train/images/*.jpg
+# dataset/*/train/images/*.png
+# dataset/*/test/images/*.jpg
+# dataset/*/test/images/*.png
+# dataset/*/valid/images/*.jpg
+# dataset/*/valid/images/*.png
+
+# Output directories
+outputs/
+results/
+detections/
+annotations/
+processed/
+
+# ====================
+# WEB UI & UPLOADS
+# ====================
+
+# Uploaded files
+uploads/
+downloads/
+temp/
+static/uploads/
+static/downloads/
+
+# ====================
+# SYSTEM & EDITOR FILES
+# ====================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.nfs*
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# ====================
+# LOGS & DEBUGGING
+# ====================
+
+# Log files
+*.log
+logs/
+log/
+*.out
+*.err
+
+# Debug files
+debug/
+*.debug
+*.trace
+
+# ====================
+# TEMPORARY & CACHE
+# ====================
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Cache directories
+.cache/
+cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ====================
+# CONFIGURATION
+# ====================
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.staging
+
+# Configuration files with sensitive data
+config/secrets.yaml
+config/private.json
+secrets/
+private_keys/
+
+# ====================
+# PACKAGE MANAGERS
+# ====================
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# conda
+.conda/
+
+# npm (if using any JS tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ====================
+# PROJECT SPECIFIC
+# ====================
+
+# Large model files
+*.weights
+*.bin
+
+# Dataset archives
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+
+# Backup files
+*.bak
+*.backup
+*_backup
+*_old
+
+# Test outputs
+test_output/
+test_results/
+
+# Documentation builds
+docs/_build/
+site/
+
+# ====================
+# KEEP THESE FILES
+# ====================
+
+# Keep important project files
+!README.md
+!requirements.txt
+!setup.py
+!pyproject.toml
+!basketball_detection/
+!templates/
+!static/
+!*.py
+!*.yaml
+!*.yml
+!data.yaml
+
+# Keep one sample image for testing (if you have one)
+# !sample_image.jpg
+# !test_video.mp4
+
+# Keep configuration templates
+!config_template.yaml
+!example.env
+
+# ====================
+# SPECIAL CASES
+# ====================
+
+# If you want to include specific small model files, use:
+# !models/small_model.pt
+
+# If you want to include sample datasets, use:
+# !dataset/sample/
+
+# If you have documentation images, use:
+# !docs/images/*.png
+# !README_images/*.jpg
