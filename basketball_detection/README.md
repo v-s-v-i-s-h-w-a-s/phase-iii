@@ -1,3 +1,56 @@
+
+# Basketball Detection & Team Classification System
+
+This directory contains all code, scripts, and assets for:
+- Basketball object detection (YOLO-based)
+- Team classification (color clustering, GNN)
+- Video analysis, benchmarking, and web UI
+
+## Key Scripts & Their Purpose
+
+- `main.py`: Entry point for running the system (legacy, see below for new workflows)
+- `generalized_basketball_inference.py`: **Main working code for basketball detection and team classification** (2D, robust, production-ready)
+- `advanced_team_classifier.py`: Enhanced team classification using K-Means (multi-color-space) and GNN (Graph Neural Network)
+- `comprehensive_test.py`: Full system test and benchmarking
+- `test_your_video.py`: User-friendly script to test any video
+- `web_ui.py`: Web interface for uploading and analyzing videos
+- `src/`: Core modules (team classifiers, data processing, model training)
+- `models/`: Model weights (YOLO, etc.)
+- `outputs/`: All generated results (videos, CSVs, JSONs)
+- `docs/`: Documentation, guides, and reports
+
+## 3D-2D Video Mapping
+- **Working code:** See `src/inference.py` and `src/data_processor.py`
+- **Purpose:** Maps 2D detections (from video) to 3D court coordinates for advanced analytics (e.g., player movement, shot trajectory)
+- **How:** Uses homography and camera calibration to project 2D bounding boxes onto a 3D court model
+
+## Why GNN (Graph Neural Network)?
+- **Purpose:** Improves team classification by modeling spatial and temporal relationships between players
+- **How:** Each player is a node; edges represent proximity or interaction. GNN learns context-aware features (e.g., team movement patterns, jersey similarity)
+- **Benefit:** More robust to occlusion, lighting, and ambiguous jersey colors than clustering alone
+
+## Project Structure
+- `src/`: Modular, reusable code
+- `models/`: Model weights
+- `outputs/`: Results
+- `docs/`: All documentation
+- `data/`, `downloads/`, `uploads/`: Datasets and user videos
+
+## How It Works
+1. **Detection:** YOLO model detects players, ball, referees, hoops
+2. **Team Classification:**
+  - K-Means/GMM: Clusters jersey colors (multi-space)
+  - GNN: Refines classification using player relationships
+3. **3D Mapping:** Projects 2D detections to 3D court
+4. **Output:** Annotated video, stats, and reports
+
+## Why This Approach?
+- **Basketball-specific:** Enforces 2 teams, 5 players each
+- **Robust:** Handles real-world video (lighting, occlusion)
+- **Extensible:** Modular for research and production
+
+---
+
 # Basketball Detection System
 
 A comprehensive YOLOv11-based basketball detection and tracking system for detecting players, referees, basketball, and hoop in video footage.

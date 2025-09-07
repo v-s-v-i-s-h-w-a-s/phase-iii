@@ -1,0 +1,32 @@
+[
+  {
+    "frame": 500,
+    "players_detected": 8,
+    "success": false,
+    "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (8, 150) + inhomogeneous part."
+  },
+  {
+    "frame": 1000,
+    "players_detected": 8,
+    "success": false,
+    "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (8, 150) + inhomogeneous part."
+  },
+  {
+    "frame": 2000,
+    "players_detected": 8,
+    "success": false,
+    "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (8, 150) + inhomogeneous part."
+  },
+  {
+    "frame": 3000,
+    "players_detected": 8,
+    "success": false,
+    "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (8, 150) + inhomogeneous part."
+  },
+  {
+    "frame": 5000,
+    "players_detected": 8,
+    "success": false,
+    "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (8, 150) + inhomogeneous part."
+  }
+]

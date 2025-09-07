@@ -1,0 +1,11 @@
+{
+  "total_players": 19672,
+  "team_counts": {
+    "team_1": 16599,
+    "team_2": 3073
+  },
+  "team_colors": {
+    "team_1": "[141 168 198]",
+    "team_2": "[86 79 28]"
+  }
+}
