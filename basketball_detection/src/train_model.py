@@ -28,15 +28,15 @@ class BasketballTrainer:
         self.models_dir = Path("./models")
         self.models_dir.mkdir(exist_ok=True)
         
-        print(f"🏀 Basketball Detection Trainer initialized")
+        print(f" Basketball Detection Trainer initialized")
         print(f"   Device: {self.device}")
         print(f"   Model: {self.model_name}")
         
     def load_model(self):
         """Load YOLOv11 model"""
-        print(f"📥 Loading {self.model_name}...")
+        print(f" Loading {self.model_name}...")
         self.model = YOLO(self.model_name)
-        print("✅ Model loaded successfully!")
+        print(" Model loaded successfully!")
         
     def train_model(self, dataset_path, epochs=100, imgsz=640, batch_size=16):
         """
@@ -45,7 +45,7 @@ class BasketballTrainer:
         if not self.model:
             self.load_model()
             
-        print(f"🎯 Starting training...")
+        print(f" Starting training...")
         print(f"   Dataset: {dataset_path}")
         print(f"   Epochs: {epochs}")
         print(f"   Image size: {imgsz}")
@@ -81,20 +81,20 @@ class BasketballTrainer:
         if best_model_path.exists():
             import shutil
             shutil.copy2(best_model_path, final_model_path)
-            print(f"✅ Best model saved to: {final_model_path}")
+            print(f" Best model saved to: {final_model_path}")
         
         return results, str(final_model_path)
     
     def evaluate_model(self, dataset_path):
         """Evaluate trained model"""
         if not self.model:
-            print("❌ No model loaded!")
+            print(" No model loaded!")
             return
             
-        print("📊 Evaluating model...")
+        print(" Evaluating model...")
         results = self.model.val(data=dataset_path)
         
-        print("✅ Evaluation complete!")
+        print(" Evaluation complete!")
         print(f"   mAP50: {results.box.map50:.3f}")
         print(f"   mAP50-95: {results.box.map:.3f}")
         
@@ -103,7 +103,7 @@ class BasketballTrainer:
     def test_inference(self, test_image_path=None):
         """Test model inference"""
         if not self.model:
-            print("❌ No model loaded!")
+            print(" No model loaded!")
             return
             
         # Use default test image if none provided
@@ -124,10 +124,10 @@ class BasketballTrainer:
                         break
         
         if not test_image_path:
-            print("❌ No test image found!")
+            print(" No test image found!")
             return
             
-        print(f"🔍 Testing inference on: {test_image_path}")
+        print(f" Testing inference on: {test_image_path}")
         results = self.model.predict(test_image_path, save=True, conf=0.5)
         
         # Print detection results
@@ -147,7 +147,7 @@ class BasketballTrainer:
 
 def main():
     """Main training function"""
-    print("🏀 Basketball Detection Training System")
+    print(" Basketball Detection Training System")
     print("=" * 50)
     
     # Initialize trainer
@@ -156,14 +156,14 @@ def main():
     # Check for dataset
     dataset_path = "./data/basketball_dataset/dataset.yaml"
     if not Path(dataset_path).exists():
-        print("❌ Dataset not found! Please run data_processor.py first.")
+        print(" Dataset not found! Please run data_processor.py first.")
         return
     
     # Load dataset info
     with open(dataset_path, 'r') as f:
         dataset_info = yaml.safe_load(f)
     
-    print(f"📋 Dataset info:")
+    print(f" Dataset info:")
     print(f"   Classes: {dataset_info['names']}")
     print(f"   Number of classes: {dataset_info['nc']}")
     
@@ -171,7 +171,7 @@ def main():
     trainer.load_model()
     
     # Train model
-    print("\n🎯 Starting training...")
+    print("\n Starting training...")
     results, model_path = trainer.train_model(
         dataset_path=dataset_path,
         epochs=50,  # Start with fewer epochs for testing
@@ -180,14 +180,14 @@ def main():
     )
     
     # Evaluate model
-    print("\n📊 Evaluating model...")
+    print("\n Evaluating model...")
     eval_results = trainer.evaluate_model(dataset_path)
     
     # Test inference
-    print("\n🔍 Testing inference...")
+    print("\n Testing inference...")
     trainer.test_inference()
     
-    print("\n✅ Training complete!")
+    print("\n Training complete!")
     print(f"   Model saved to: {model_path}")
 
 if __name__ == "__main__":
